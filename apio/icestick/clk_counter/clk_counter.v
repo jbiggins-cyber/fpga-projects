@@ -12,7 +12,7 @@ module button_counter (
 );
 
     wire            rst;
-    reg      [23:0] osc_counter;   // Counts oscillator
+    reg      [22:0] osc_counter;   // Counts oscillator
     reg      [0:0] slow_clk;      // 1Hz clock
 
     // Reset is the inverse of the reset button
@@ -22,11 +22,11 @@ module button_counter (
     always @ (posedge clk or posedge rst) begin
         if (rst == 1'b1) begin
             slow_clk <= 1'b0;
-            osc_counter <= 24'b0;
+            osc_counter <= 23'b0;
         end else begin
-            if (osc_counter >= 12000000) begin
+            if (osc_counter >= 23'd6000000) begin
                 slow_clk <= slow_clk + 1'b1;
-                osc_counter <= 24'b0;
+                osc_counter <= 23'b0;
             end else begin
                 osc_counter <= osc_counter + 1'b1;
             end
