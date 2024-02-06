@@ -67,7 +67,7 @@ module fsm_moore (
                 STATE_COUNTING: begin
                     if (led == MAX_LED_COUNT) begin
                         done_sig <= 1'b1;
-                        state <= STATE_DONE;
+                        state <= STATE_IDLE;
                     end
                 end
                 
