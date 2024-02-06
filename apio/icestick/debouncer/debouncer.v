@@ -1,8 +1,9 @@
 // Module: Count up on each button press and display on LEDs
+// without skipping 
 module button_counter (
 
     // Inputs
-    input               clk,
+    input               clk,        // 12MHz oscillator
     input               rst_btn,
     input               count_btn,
 
@@ -16,7 +17,7 @@ module button_counter (
     localparam STATE_WAIT       = 2'd2;
     localparam STATE_PRESSED    = 2'd3;
 
-    // Max count for counter to debounce button
+    // Max count for counter to debounce button (200ms)
     localparam MAX_DEBOUNCE_COUNT = 22'd2399999;
 
     // Internal signals
@@ -54,10 +55,14 @@ module button_counter (
                     end
                 end
 
-                // Wait for button signal to stop bouncing
+                // Wait for button signal to stop bouncing and sample again
                 STATE_WAIT: begin
                     if (debounce_count == MAX_DEBOUNCE_COUNT) begin
-                        state <= STATE_PRESSED;
+                        if (count_btn == 1'b0) begin
+                            state <= STATE_PRESSED;
+                        end else begin
+                            state <= STATE_HIGH;
+                        end
                     end
                 end
 
