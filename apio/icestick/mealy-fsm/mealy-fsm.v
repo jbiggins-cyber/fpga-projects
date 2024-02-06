@@ -59,7 +59,7 @@ module fsm_moore (
                 STATE_IDLE: begin
                     done_sig <= 1'b0;
                     if (go == 1'b1) begin
-                        state <= STATE_IDLE;
+                        state <= STATE_COUNTING;
                     end
                 end
 
