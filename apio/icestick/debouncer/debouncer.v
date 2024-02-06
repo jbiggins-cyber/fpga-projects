@@ -17,8 +17,8 @@ module button_counter (
     localparam STATE_WAIT       = 2'd2;
     localparam STATE_PRESSED    = 2'd3;
 
-    // Max count for counter to debounce button (200ms)
-    localparam MAX_DEBOUNCE_COUNT = 22'd2399999;
+    // Max count for counter to debounce button (40ms)
+    localparam MAX_DEBOUNCE_COUNT = 22'd480000 - 1;
 
     // Internal signals
     wire rst;
