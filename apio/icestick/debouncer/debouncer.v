@@ -17,14 +17,14 @@ module button_counter (
     localparam STATE_PRESSED    = 2'd3;
 
     // Max count for counter to debounce button
-    localparam MAX_DEBOUNCE_COUNT = 21'd1199999;
+    localparam MAX_DEBOUNCE_COUNT = 22'd2399999;
 
     // Internal signals
     wire rst;
 
     // Internal storage elements
     reg [1:0]   state;
-    reg [20:0]  debounce_count;
+    reg [21:0]  debounce_count;
 
     // Invert active-low buttons
     assign rst = ~rst_btn;
@@ -34,11 +34,11 @@ module button_counter (
         
         // On reset, return to high state
         if (rst == 1'b1) begin
-            state <= STATE_IDLE;
+            state <= STATE_HIGH;
 
         // State transitions
         end else begin
-            case (state): begin
+            case (state)
                 
                 // Wait for button to be pressed (go low)
                 STATE_HIGH: begin
@@ -73,12 +73,12 @@ module button_counter (
     // Handle debounce counter
     always @ (posedge clk or posedge rst) begin
         if (rst == 1'b1) begin
-            debounce_count <= 21'b0; 
+            debounce_count <= 22'b0; 
         end else begin
             if (state == STATE_WAIT) begin
                 debounce_count <= debounce_count + 1;
             end else begin
-                debounce_count <= 21'b0;
+                debounce_count <= 22'b0;
             end
         end
     end
