@@ -29,7 +29,7 @@ module fsm_moore (
     reg [1:0]   state;
     reg [23:0]  clk_count;
 
-    // Inverst active-low buttons
+    // Invert active-low buttons
     assign rst = ~rst_btn;
     assign go = ~go_btn;
 
@@ -57,3 +57,48 @@ module fsm_moore (
             case (state)
 
                 // Wait for go button to be pressed
+                STATE_IDLE: begin
+                    if (go == 1'b1) begin
+                        state <= STATE_COUNTING;
+                    end
+                end
+
+                // Go from counting to done
+                STATE_COUNTING: begin
+                    if (led == MAX_LED_COUNT) begin
+                        state <= STATE_DONE;
+                    end
+                end
+
+                // Spend one clock cycle in done state
+                STATE_DONE: state <= STATE_IDLE;
+                
+                // Go to idle if in unknown state
+                default: state <= STATE_IDLE;
+            endcase
+        end
+    end
+
+    // Handle the LED counter
+    always @ (posedge div_clk or posedge rst) begin
+        if (rst == 1'b1) begin
+            led <= 4'd0;
+        end else begin
+            if (state == STATE_COUNTING) begin
+                led <= led + 1;
+            end else begin
+                led <= 4'd0;
+            end
+        end
+    end
+
+    // Handle done LED output
+    always @ ( * ) begin
+        if (state == STATE_DONE) begin
+            done_sig = 1'b1;
+        end else begin
+            done_sig = 1'b0;
+        end
+    end
+
+endmodule
